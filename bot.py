@@ -26,14 +26,11 @@ def create_message_for_user(description, devman_url):
 
 
 def main():
-    # load_dotenv()
-    # TG_CHAT_ID = os.getenv("TG_CHAT_ID")
-    # TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-    # DEVMAN_TOKEN = os.getenv("DEVMAN_TOKEN")
+    env = os.environ
 
-    TG_CHAT_ID = os.environ["TG_CHAT_ID"]
-    TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
-    DEVMAN_TOKEN = os.environ["DEVMAN_TOKEN"]
+    TG_CHAT_ID = env["TG_CHAT_ID"]
+    TELEGRAM_TOKEN = env["TELEGRAM_TOKEN"]
+    DEVMAN_TOKEN = env["DEVMAN_TOKEN"]
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
