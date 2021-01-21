@@ -31,9 +31,9 @@ def main():
     # TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
     # DEVMAN_TOKEN = os.getenv("DEVMAN_TOKEN")
 
-    TG_CHAT_ID = os.environ("TG_CHAT_ID")
-    TELEGRAM_TOKEN = os.environ('TELEGRAM_TOKEN')
-    DEVMAN_TOKEN = os.environ("DEVMAN_TOKEN")
+    TG_CHAT_ID = os.environ["TG_CHAT_ID"]
+    TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
+    DEVMAN_TOKEN = os.environ["DEVMAN_TOKEN"]
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
