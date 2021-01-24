@@ -6,6 +6,12 @@ import requests
 import telegram
 
 
+class BotLogsHandler(logging.Handler):
+    def emit(self, record: LogRecord) -> None:
+        log_entry = self.format(record)
+        bot.send_message(chat_id=TG_CHAT_ID, text=log_entry)
+
+
 def get_task_description(url, headers, params):
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
@@ -25,7 +31,7 @@ def create_message_for_user(description, devman_url):
 
 def main():
     TG_CHAT_ID = os.environ['TG_CHAT_ID']
-    TELEGRAM_TOKEN =os.environ['TELEGRAM_TOKEN']
+    TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
     DEVMAN_TOKEN = os.environ['DEVMAN_TOKEN']
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
@@ -34,7 +40,12 @@ def main():
     devman_api_url = 'https://dvmn.org/api/long_polling/'
     headers = {'Authorization': 'Token {}'.format(DEVMAN_TOKEN)}
     params = {'timestamp': time.time()}
-    logging.warning('The bot is running.')
+
+    logger = logging.getLogger('bot_logger')
+    logger.setLevel(logging.INFO)
+    logger.addHandler(BotLogsHandler())
+
+    logger.info('The bot is running.')
 
     while True:
         task_description = get_task_description(devman_api_url, headers, params)
@@ -51,11 +62,11 @@ def main():
             else:
                 params = {'timestamp': task_description['timestamp_to_request']}
         except requests.exceptions.HTTPError as http_error:
-            logging.warning(http_error)
+            logger.warning(http_error)
         except requests.exceptions.ReadTimeout as read_timeout_error:
-            logging.warning(read_timeout_error)
+            logger.warning(read_timeout_error)
         except requests.exceptions.ConnectionError as connection_error:
-            logging.warning(connection_error)
+            logger.warning(connection_error)
             time.sleep(60)
 
 
