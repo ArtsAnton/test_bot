@@ -7,7 +7,7 @@ import telegram
 
 
 class BotLogsHandler(logging.Handler):
-    def emit(self, record: LogRecord) -> None:
+    def emit(self, record):
         log_entry = self.format(record)
         bot.send_message(chat_id=TG_CHAT_ID, text=log_entry)
 
