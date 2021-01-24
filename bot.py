@@ -34,6 +34,7 @@ def main():
     devman_api_url = 'https://dvmn.org/api/long_polling/'
     headers = {'Authorization': 'Token {}'.format(DEVMAN_TOKEN)}
     params = {'timestamp': time.time()}
+    logging.warning('The bot is running.')
 
     while True:
         task_description = get_task_description(devman_api_url, headers, params)
