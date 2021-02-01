@@ -7,9 +7,21 @@ import telegram
 
 
 class BotLogsHandler(logging.Handler):
-    def emit(self, record):
+    def __init__(self, bot, chat_id):
+        super().__init__()
+        self.bot = bot
+        self.chat_id = chat_id
+
+    def emit(self, record: logging.LogRecord):
         log_entry = self.format(record)
-        bot.send_message(chat_id=TG_CHAT_ID, text=log_entry)
+        self.bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
+def get_logger(bot, chat_id):
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    logger.addHandler(BotLogsHandler(bot, chat_id))
+    return logger
 
 
 def get_task_description(url, headers, params):
@@ -41,11 +53,10 @@ def main():
     headers = {'Authorization': 'Token {}'.format(DEVMAN_TOKEN)}
     params = {'timestamp': time.time()}
 
-    logger = logging.getLogger('bot_logger')
-    logger.setLevel(logging.INFO)
-    logger.addHandler(BotLogsHandler())
+    msg_for_error = 'Бот упал с ошибкой'
 
-    logger.info('The bot is running.')
+    logger = get_logger(bot, TG_CHAT_ID)
+    logger.info('Бот запущен!')
 
     while True:
         task_description = get_task_description(devman_api_url, headers, params)
@@ -62,11 +73,14 @@ def main():
             else:
                 params = {'timestamp': task_description['timestamp_to_request']}
         except requests.exceptions.HTTPError as http_error:
-            logger.warning(http_error)
+            logger.error(msg_for_error)
+            logger.exception(http_error)
         except requests.exceptions.ReadTimeout as read_timeout_error:
-            logger.warning(read_timeout_error)
+            logger.error(msg_for_error)
+            logger.exception(read_timeout_error)
         except requests.exceptions.ConnectionError as connection_error:
-            logger.warning(connection_error)
+            logger.error(msg_for_error)
+            logger.exception(connection_error)
             time.sleep(60)
 
 
