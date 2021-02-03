@@ -6,8 +6,10 @@
 ### Полезные ссылки:
 * [Python 3.6.9;](https://www.python.org/downloads/)
 * [Библиотека requests 2.25.0;](https://requests.readthedocs.io/en/master/)
-* [Библиотека python-dotenv 0.15.0;](https://pypi.org/project/python-dotenv/)
 * [Библиотека python-telegram-bot.](https://github.com/python-telegram-bot/python-telegram-bot#installing)
+
+### Запуск бота
+* Зарегестрироваться на [heroku.com](https://www.heroku.com)
 
 ### Цель проекта
 
