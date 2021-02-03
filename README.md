@@ -17,16 +17,20 @@
 * Создайте приложение на heroku.com;
 * Не изменяйте и не удаляйте файл [Procfile](https://github.com/ArtsAnton/test_bot/blob/main/Procfile). Определяет скрипт для запуска на heroku.com - [bot.py](https://github.com/ArtsAnton/test_bot/blob/main/bot.py);   
 * На вкладке  Deploy проекта подключитесь к репозиторию с ботом;
-* На вкладке Settings проекта добавьте config vars (telegram chat id, telegram token, devman token);
-* На вкладке Deploy проекта нажмёте Deploy Branch;
-* Бот запущен.
+
 
 ![images1](https://github.com/ArtsAnton/test_bot/blob/main/images/connect.png)
 
+* На вкладке Settings проекта добавьте config vars (telegram chat id, telegram token, devman token);
+
 ![images2](https://github.com/ArtsAnton/test_bot/blob/main/images/vars.png)
 
-* Посмотреть список ваших приложени: heroku apps;
-* Посмотреть логи бота: heroku logs -a app_name.
+* На вкладке Deploy проекта нажмёте Deploy Branch;
+* Бот запущен.
+
+После запуска:
+* Посмотреть список ваших приложени в heroku: heroku apps;
+* Посмотреть логи запущенного бота: heroku logs -a app_name.
 
 
 ### Цель проекта
