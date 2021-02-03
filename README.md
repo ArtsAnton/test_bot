@@ -25,7 +25,7 @@
 
 ![images2](https://github.com/ArtsAnton/test_bot/blob/main/images/vars.png)
 
-* На вкладке Deploy проекта нажмёте Deploy Branch;
+* На вкладке Deploy проекта нажмите Deploy Branch;
 * Бот запущен.
 
 После запуска:
