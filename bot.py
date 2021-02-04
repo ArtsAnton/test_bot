@@ -5,6 +5,8 @@ import time
 import requests
 import telegram
 
+logger = logging.getLogger(__file__)
+
 
 class BotLogsHandler(logging.Handler):
     def __init__(self, bot, chat_id):
@@ -15,13 +17,6 @@ class BotLogsHandler(logging.Handler):
     def emit(self, record: logging.LogRecord):
         log_entry = self.format(record)
         self.bot.send_message(chat_id=self.chat_id, text=log_entry)
-
-
-def get_logger(bot, chat_id):
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    logger.addHandler(BotLogsHandler(bot, chat_id))
-    return logger
 
 
 def get_task_description(url, headers, params):
@@ -48,14 +43,16 @@ def main():
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
+    logger.setLevel(logging.INFO)
+    logger.addHandler(BotLogsHandler(bot, TG_CHAT_ID))
+
     devman_url = 'https://dvmn.org{}'
     devman_api_url = 'https://dvmn.org/api/long_polling/'
     headers = {'Authorization': 'Token {}'.format(DEVMAN_TOKEN)}
     params = {'timestamp': time.time()}
 
-    msg_for_error = 'Бот упал с ошибкой'
+    msg_for_error = 'Бот упал с ошибкой:'
 
-    logger = get_logger(bot, TG_CHAT_ID)
     logger.info('Бот запущен!')
 
     while True:
@@ -72,15 +69,12 @@ def main():
                 params = {'timestamp': task_description['last_attempt_timestamp']}
             else:
                 params = {'timestamp': task_description['timestamp_to_request']}
-        except requests.exceptions.HTTPError as http_error:
-            logger.error(msg_for_error)
-            logger.exception(http_error)
-        except requests.exceptions.ReadTimeout as read_timeout_error:
-            logger.error(msg_for_error)
-            logger.exception(read_timeout_error)
-        except requests.exceptions.ConnectionError as connection_error:
-            logger.error(msg_for_error)
-            logger.exception(connection_error)
+        except requests.exceptions.HTTPError:
+            logger.exception(msg_for_error)
+        except requests.exceptions.ReadTimeout:
+            logger.exception(msg_for_error)
+        except requests.exceptions.ConnectionError:
+            logger.exception(msg_for_error)
             time.sleep(60)
 
 
